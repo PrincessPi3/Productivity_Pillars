@@ -1,0 +1,2 @@
+---
+provision_ssh_authorized_public_key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFhNVLV7IJn2aDXRzC7ytKcbzOP5Ep6KkHSGVZKVS+Oi productivity@github

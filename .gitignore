@@ -1,3 +1,4 @@
 vault-key
 .vagrant
 ssh-key-local
+LOCAL_ONLY/*

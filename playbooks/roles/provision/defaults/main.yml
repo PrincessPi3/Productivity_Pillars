@@ -1,0 +1,6 @@
+---
+# defaults file for provision
+provision_ansible_user: ansibleuser
+provision_tailscale_auth_key: null
+provision_tailscale_tags: null
+provision_ssh_authorized_public_key: null

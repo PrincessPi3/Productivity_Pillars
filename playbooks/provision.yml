@@ -1,0 +1,11 @@
+---
+- hosts: provision
+
+  vars_files:
+    - ./vars/encrypted-vars.yml
+    - ./vars/unencrypted-vars.yml
+
+  roles:
+    - provision
+
+  

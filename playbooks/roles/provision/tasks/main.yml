@@ -1,0 +1,47 @@
+---
+# tasks file for provision
+
+- name: Add ansible user.
+  user:
+    name: "{{ provision_ansible_user }}"
+    system: yes
+  become: true
+
+- name: Set up sudo for ansible user.
+  ansible.builtin.template:
+    src: sudoer.j2
+    dest: "/etc/sudoers.d/{{ provision_ansible_user }}"
+    owner: root
+    group: root
+    mode: 0440
+  become: true
+
+- name: Create ssh directory.
+  file:
+    path: "/home/{{ provision_ansible_user }}/.ssh/"
+    state: directory
+    owner: "{{ provision_ansible_user }}"
+    group: "{{ provision_ansible_user }}"
+  become: true
+  
+- name: Add ssh key to user.
+  copy:
+    dest: "/home/{{ provision_ansible_user }}/.ssh/authorized_keys"
+    content: "{{ provision_ssh_authorized_public_key }}"
+    owner: "{{ provision_ansible_user }}"
+    group: "{{ provision_ansible_user }}"
+  become: true
+
+- name: Install tailscale.
+  shell: |
+    # Add the tailscale repository
+    sudo dnf config-manager --add-repo https://pkgs.tailscale.com/stable/rhel/8/tailscale.repo -y
+    # Install Tailscale
+    sudo dnf install tailscale -y
+    # Enable and start tailscaled 
+    sudo systemctl enable --now tailscaled
+  become: true
+
+- name: Bring up tailscale with proper tags
+  shell: tailscale up --authkey={{ provision_tailscale_auth_key }}
+  become: true

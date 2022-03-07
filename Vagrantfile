@@ -1,9 +1,9 @@
 Vagrant.configure("2") do |config|
   # config.ssh.username = "vagrant"
+  config.vm.box = "almalinux/8"
   config.ssh.password = "vagrant"
   config.ssh.insert_key = false
   config.ssh.dsa_authentication = false
-  config.vm.box = "almalinux/8"
 
   config.vm.define "exitnode0" do |exitnode0|
     exitnode0.vm.hostname = "exitnode0"

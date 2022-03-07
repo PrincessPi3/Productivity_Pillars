@@ -32,8 +32,11 @@
     - containerd.io
   become: true
 
-- name: add userpermissions
-  shell: "usermod -aG docker {{ provision_ansible_user }}"
+- name: Add docker user permissions.
+  user:
+    name: "{{ provision_ansible_user }}"
+    groups: docker
+    append: yes
   become: true
 
 - name: Enable and start docker service.

@@ -16,6 +16,29 @@
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /var/lib/docker/volumes:/var/lib/docker/volumes
-    env:
-      AGENT_SECRET: "{{ portainer_agent_secret }}"
+    # env:
+    #   AGENT_SECRET: "{{ portainer_agent_secret }}"
     restart_policy: unless-stopped
+    # state: absent
+
+- name: Deploy Minio container.
+  community.docker.docker_container:
+    name: minio
+    image: quay.io/minio/minio:RELEASE.2022-03-05T06-32-39Z
+    command: server --console-address ":9090" http://node{0...3}/data{1...2}
+    ports:
+      - "9000:9000"
+      - "9090:9090"
+    volumes:
+      - data1:/data1
+      - data2:/data2
+    env:
+      MINIO_ROOT_USER: "{{ NODE_MINIO_ROOT_USER }}"
+      MINIO_ROOT_PASSWORD: "{{ NODE_MINIO_ROOT_PASSWORD }}"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    restart_policy: unless-stopped
+    # state: absent
